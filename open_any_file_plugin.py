@@ -10,9 +10,13 @@ class OpenAnyFile(plugin.URLHandler):
     handler_name = 'openfile'
     nameopen = "Open the file"
     namecopy = "Copy file path"
-    match = '[^ \t\n\r\f]+'
+    match = '[^ \t\n\r\f:]+(:[0-9]+)?'
 
     def callback(self, url):
+        m = re.match(r'([^ \t\n\r\f:]+)(?::([0-9]+))?', url)
+        if m and m.group(2):
+            url = m.group(1)
+
         # HACK (from https://github.com/mchelem/terminator-editor-plugin)
         # Because the current working directory is not available to
         # plugins, we need to use the inspect module to climb up the stack to
